@@ -1,0 +1,25 @@
+<h1>testsession</h1>
+
+Hey there <%= user%>, welcome <a href='/logout'>click to logout</a>
+<% var a=user %>
+<p>TEST AJAX</p>
+
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function(){
+    $("p").click(function(){
+        console.log("TEST USER");
+        var a="<%= user%>;"
+        var get_url='/test_user?user=<%= user %>';
+        $.get(get_url,
+        
+        function(data,status){
+                console.log(data);
+        }
+        );
+
+    });  
+});
+
+</script>

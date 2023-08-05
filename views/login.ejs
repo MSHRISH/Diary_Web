@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
+    </head>
+
+
+    <title>Diary Login</title>
+</head>
+<body style="background-color:gray;">
+    
+    <img src="images/diary2.png" class="logo">
+  
+    <div class="topnav">
+        <div class="topnav-right">
+            <a href="" id="time"></a>
+            <a id='hovers' href="/">Home</a>
+            <a id='hovers' href="/signup">Sign-Up</a>
+            <a id='hovers' href="/login">Sign-in</a>
+        </div>
+        
+      </div>
+
+      <div class="content">
+            <img src="images/diary_digi.jfif" align="right" height="400 px" width="auto">
+    </div>
+    <div class="matter">
+        <h1>Login</h1><br>
+        <br>
+        <form class="loginform">
+            
+            <label>Username:</label>
+            <input type="text" id="uname" size="25">
+            <p id="p1"></p>   
+            <br>
+            <br>
+            <label>Password:</label>
+            <input type="password" id="pwrd" size="25">
+            <p id="p2"></p>   
+            <br>
+            <br>
+            <input type="button" value="Login" id="login" size="30" style="width:235px;margin-left: 150px;">
+
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+<style>
+    
+/* Add a black background color to the top navigation */
+.topnav {
+    position: relative;
+    background-color: #333;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
+}
+
+
+.logo{
+    position: fixed;
+    height: 53px;
+    width: auto;
+    z-index: 2;
+
+}
+
+.content{
+    margin-top: 9%;
+    margin-right: 9%;
+    
+    
+}
+
+.matter{
+    margin-left: 10%;
+    background-color:aliceblue;
+    width: 55%;
+    height: 400px;
+}
+
+h1{
+    text-align: center;
+    font-size:30px; font-weight:300; 
+    color:blue; 
+    letter-spacing:1px;
+    text-transform: uppercase;
+    background-color:antiquewhite;
+
+    height: 50px;
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-template-rows: 27px 0;
+    grid-gap: 20px;
+    align-items: center;
+}
+h1:after,h1:before{
+    content: "  ";
+    display: block;
+    border-bottom: 1px solid #c50000;
+    border-top: 1px solid #c50000;
+    height: 5px;
+  background-color:#f8f8f8;
+
+}
+.loginform{
+    margin-left: 100px;
+}
+
+label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+      }
+      p{
+        display: inline-block;
+        text-align: left;
+      }
+
+
+</style>
+
+
+
+
+<script>
+    function refreshTime() {
+  const timeDisplay = document.getElementById("time");
+  const dateString = new Date().toLocaleString();
+  const formattedString = dateString.replace(", ", " - ");
+  timeDisplay.textContent = formattedString.slice(0,18);
+}
+  setInterval(refreshTime, 1000);
+
+  $(document).ready(function(){
+      $("#login").click(function(){
+        var uname=document.getElementById('uname').value;
+        var pwrd=document.getElementById('pwrd').value;
+        
+
+        function validate(flag){
+          var a=validateUname()
+          var b=validatePwrd();
+          if(a==true && b==true){
+            flag=true;
+          }
+          return flag;
+        }
+
+        var test_flag=validate(false);
+
+        if(test_flag){
+          $.post('/login_chk',
+          {
+            uname:uname,
+            pwrd:pwrd
+          },
+          function(data,status){
+            //console.log(data); 
+            if(data.login=='success'){
+             window.location.replace("http://localhost:8069/app");
+             //console.log(data.user);
+            } 
+            if(data.login=='fail'){
+              alert('Invalid Details');
+              
+            }
+          }
+          )
+        }
+
+        function validateUname(){
+          if(uname==""){
+        document.getElementById("p1").innerHTML="Name is required";
+        //flag=false;
+        return false;
+        }
+        else if( /^[a-zA-Z]+$/.test(uname)==false){
+        document.getElementById("p1").innerHTML="Invalid name";
+        //flag=false;
+        return false;
+      }
+      else{
+        document.getElementById("p1").innerHTML="";
+        //flag=true;
+        return true;
+
+      }
+
+      }
+      function validatePwrd(){
+        if(pwrd==""){
+        document.getElementById("p2").innerHTML="Password is required";
+        //flag=false;    
+        return false;         
+       }
+       else if(pwrd.length<6){
+        document.getElementById('p2').innerHTML="Needs More than 6 character"
+
+       }
+      else{
+        document.getElementById('p2').innerHTML='';
+        //flag=true;
+        return true;
+      }
+      }
+
+      });
+  });
+</script>
